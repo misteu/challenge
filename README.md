@@ -1,5 +1,8 @@
 # Challenge
 
+## What is this?
+This project is using CoreData for storing simple objects and optionally relating them to each other. Objects and object relations are manipulated via simple screens featuring table views.
+
 ## Technologies
 - Clean Swift Architecture
 - Concurrency framework (async/await)
