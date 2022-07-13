@@ -4,6 +4,7 @@
 - Clean Swift Architecture
 - Concurrency framework (async/await)
 - Core Data
+- No 3rd Party libraries ❤️
 
 ## How to use
 
