@@ -12,19 +12,27 @@
 
 import UIKit
 
+/// Defines CRUD methods for handling objects on a store.
 protocol CreateAndEditObjectBusinessLogic {
+	/// Fetches object for editing (properties and relations)
 	func fetchObjectForEditing(request: CreateAndEditObject.FetchObject.Request) async
-	func saveObject(request: CreateAndEditObject.CreateObject.Request) async
-	func updateObject(request: CreateAndEditObject.UpdateObject.Request) async
-	func fetchObject(request: CreateAndEditObject.FetchObject.Request) async -> Object?
+	/// Presents object creation screen.
 	func createObject()
+	/// Saves object to store.
+	func saveObject(request: CreateAndEditObject.CreateObject.Request) async
+	/// Updates stored object with given request.
+	func updateObject(request: CreateAndEditObject.UpdateObject.Request) async
+	/// Fetches object.
+	/// - Returns: An `Object` created from store.
+	func fetchObject(request: CreateAndEditObject.FetchObject.Request) async -> Object?
+	/// The edited object.
 	var objectToEdit: Object? { get }
 }
 
-class CreateAndEditObjectInteractor: CreateAndEditObjectBusinessLogic {
+final class CreateAndEditObjectInteractor: CreateAndEditObjectBusinessLogic {
 	var presenter: CreateAndEditObjectPresentationLogic?
+	/// Worker interacting with `LocalStore` (CoreData).
 	var worker = ObjectWorker(objectsStore: LocalStore())
-
 	var objectToEdit: Object?
 
 	func fetchObjectForEditing(request: CreateAndEditObject.FetchObject.Request) async {

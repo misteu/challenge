@@ -11,15 +11,19 @@
 
 import UIKit
 
+/// Conforming classes can present a list of objects.
 protocol ObjectListPresentationLogic {
+	/// Presents screen with list of objects for navigating to their edit screens.
 	func presentObjectList(response: ListObjects.FetchObjects.Response)
+	/// Presents screen with list of objects for selecting object relations.
 	func presentObjectRelationList(response: ListObjects.RelationSelector.Response)
 }
 
-class ObjectListPresenter: ObjectListPresentationLogic {
+final class ObjectListPresenter: ObjectListPresentationLogic {
+	/// The source view controller.
 	weak var viewController: ObjectListDisplayLogic?
 
-	// MARK: Presentation
+	// MARK: - ObjectListPresentationLogic
 
 	func presentObjectList(response: ListObjects.FetchObjects.Response) {
 		let displayedObjects = response.objects.map {

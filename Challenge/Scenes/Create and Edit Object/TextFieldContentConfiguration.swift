@@ -3,13 +3,17 @@
 //  Challenge
 //
 //  Created by Michael Steudter on 12.07.22.
-//
+//	Based on https://stackoverflow.com/a/68621466/1898677
 
 import UIKit
 
+/// Configures a cell showing a textfield.
 struct TextFieldContentConfiguration: UIContentConfiguration {
+	/// The textfield's text.
 	var text: String?
+	/// The textfield's placeholder text.
 	var placeholder: String?
+	/// Called whenever the text was changed.
 	var textChanged: ((String?) -> Void)?
 
 	func makeContentView() -> UIView & UIContentView {
@@ -21,7 +25,8 @@ struct TextFieldContentConfiguration: UIContentConfiguration {
 	}
 }
 
-class TextFieldContentView: UIView, UIContentView, UITextFieldDelegate {
+/// `UIContentView` used in `TextFieldContentConfiguration` for showing a textfield in a cell.
+final class TextFieldContentView: UIView, UIContentView, UITextFieldDelegate {
 	public var configuration: UIContentConfiguration {
 		get {
 			return appliedConfiguration

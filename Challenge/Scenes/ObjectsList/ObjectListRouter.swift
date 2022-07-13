@@ -12,15 +12,21 @@
 import UIKit
 
 // swiftlint:disable identifier_name
+/// Possible routes from object list.
 @objc protocol ObjectListRoutingLogic {
+	/// Routes to object creation screen.
 	func routeToCreateObject() async
+	/// Routes to object editing screen.
+	/// - Parameter id: The id of the object to edit.
 	func routeToEditObject(id: String) async
-	func routeToAddRelationToObject(id: String, to objectId: String) async
 }
 
-class ObjectListRouter: NSObject, ObjectListRoutingLogic {
+final class ObjectListRouter: NSObject, ObjectListRoutingLogic {
 
+	/// The source view controller.
 	weak var viewController: ObjectListViewController?
+
+	// MARK: - ObjectListRoutingLogic
 
 	@MainActor
 	func routeToCreateObject() async {
@@ -34,11 +40,5 @@ class ObjectListRouter: NSObject, ObjectListRoutingLogic {
 		let createEditVc = CreateAndEditObjectViewController()
 		await createEditVc.interactor?.fetchObjectForEditing(request: .init(id: id))
 		viewController?.navigationController?.pushViewController(createEditVc, animated: true)
-	}
-
-	@MainActor
-	func routeToAddRelationToObject(id: String, to objectId: String) async {
-		// TODO: Improve this. This might be error prone as it depends on the navigation stack.
-		viewController?.navigationController?.popViewController(animated: true)
 	}
 }

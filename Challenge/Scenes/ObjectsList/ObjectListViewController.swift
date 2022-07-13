@@ -12,19 +12,25 @@
 import UIKit
 import Combine
 
+/// Conforming classes can display fetched objects.
 protocol ObjectListDisplayLogic: AnyObject {
+	/// Prepares view controller for displaying fetched objects.
 	func displayFetchedObjects(viewModel: ListObjects.FetchObjects.ViewModel)
+	/// Prepares view controller for displaying fetched objects to be selected as object relations.
 	func displayObjectRelationSelector(viewModel: ListObjects.RelationSelector.ViewModel)
 }
 
-class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
+final class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 	var interactor: ObjectListBusinessLogic?
 	var router: (NSObjectProtocol & ObjectListRoutingLogic)?
+	/// Search controller for filtering objects.
 	let searchController = UISearchController(searchResultsController: nil)
-
+	/// Holds subscriptions for updating UI based on CoreData notifications.
 	var cancelBag: Set<AnyCancellable> = []
+	/// All the currently displayed objects.
+	var displayedObjects: [ListObjects.DisplayedObject] = []
 
-	// MARK: Object lifecycle
+	// MARK: - Object lifecycle
 
 	init() {
 		super.init(nibName: nil, bundle: nil)
@@ -34,8 +40,9 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 	/// Not supported. Always `nil`
 	required init?(coder: NSCoder) { nil }
 
-	// MARK: Setup
+	// MARK: - Setup
 
+	/// Sets up view controller.
 	private func setup() {
 		let viewController = self
 		let interactor = ObjectListInteractor()
@@ -52,6 +59,7 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 		setSearch()
 	}
 
+	/// Sets up navigation bar and it's right button.
 	private func setNavigationBar() {
 		title = NSLocalizedString("Objects", comment: "Title of the screen showing all the objects.")
 		let addButton = UIBarButtonItem(systemItem: .add, primaryAction: .init(handler: { [weak self] _ in
@@ -60,11 +68,13 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 		navigationItem.rightBarButtonItem = addButton
 	}
 
+	/// Sets up search controller.
 	private func setSearch() {
 		self.navigationItem.searchController = searchController
 		searchController.searchResultsUpdater = self
 	}
 
+	/// Sets subscriptions for CoreData notifications.
 	private func setSubscriptions() {
 		NotificationCenter
 			.default
@@ -76,24 +86,26 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 			.store(in: &cancelBag)
 	}
 
-	// MARK: Routing
+	// MARK: - Routing
 
+	/// Routes to object creation screen.
 	func createObject() {
 		Task {
 			await router?.routeToCreateObject()
 		}
 	}
 
-	// MARK: Fetch objects
+	// MARK: - Fetch objects
 
-	var displayedObjects: [ListObjects.DisplayedObject] = []
-
+	/// Fetches and lists objects.
 	func fetchObjects() {
 		let request = ListObjects.FetchObjects.Request()
 		Task {
 			await interactor?.listObjects(request: request)
 		}
 	}
+
+	// MARK: - ObjectListDisplayLogic
 
 	func displayFetchedObjects(viewModel: ListObjects.FetchObjects.ViewModel) {
 		title = ListObjects.FetchObjects.ViewModel.title
@@ -105,10 +117,11 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 		displayedObjects = viewModel.displayedObjects
 		displayedObjects.removeAll(where: { $0.id == interactor?.selectedObjectId })
 		title = ListObjects.RelationSelector.ViewModel.title
+		navigationItem.rightBarButtonItem = nil
 		tableView.reloadData()
 	}
 
-	// MARK: - TableView Data Source & Delegate
+	// MARK: - TableView Data Source
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
 		1
@@ -123,11 +136,12 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "ObjectCell", for: indexPath)
 		var config = cell.defaultContentConfiguration()
 
+		// Configure cell with given object data.
 		config.text = "\(displayedObject.type): \(displayedObject.name)"
 		config.secondaryText = displayedObject.description
 		cell.contentConfiguration = config
 
-		// Check if object list is showing all objects or used as relation selector.
+		// When list is showing all objects, disclosure indicator is set to indicate navigation to object editing.
 		if title == ListObjects.FetchObjects.ViewModel.title {
 			cell.accessoryType = .disclosureIndicator
 		} else {
@@ -136,14 +150,17 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 		return cell
 	}
 
+	// MARK: - TableView Delegate
+
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if let displayedObjectsId = displayedObjects[indexPath.row].id {
 
-			// Check if object list is showing all objects or used as relation selector.
+			// View controller is used for showing existing objects: Navigating to object's edit screen.
 			if title == ListObjects.FetchObjects.ViewModel.title {
 				Task {
 					await router?.routeToEditObject(id: displayedObjectsId)
 				}
+			// View controller is used for adding relation to object: Update relation and navigate back to edit screen.
 			} else if let editedObjectsId = interactor?.selectedObjectId {
 				Task {
 					var object = await interactor?.fetchObject(request: .init(id: editedObjectsId))
@@ -154,6 +171,8 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 			}
 		}
 	}
+
+	// MARK: - Swipe to delete object
 
 	override func tableView(
 		_ tableView: UITableView,
@@ -172,7 +191,10 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 }
 
 extension ObjectListViewController: UISearchResultsUpdating {
+
 	func updateSearchResults(for searchController: UISearchController) {
+
+		// TODO: Searching might be refactored to search via CoreData fetch queries instead of filtering the data source.
 		if let searchText = searchController.searchBar.text, !searchText.isEmpty {
 			displayedObjects = displayedObjects.filter { object in
 				object.name.localizedCaseInsensitiveContains(searchText) ||
@@ -181,11 +203,10 @@ extension ObjectListViewController: UISearchResultsUpdating {
 			}
 		} else {
 			Task {
-				await interactor?.listObjects(request: .init())
+				// List all objects, exclude currently edited object from search results.
+				await interactor?.listObjects(request: .init(excludedId: interactor?.selectedObjectId))
 			}
 		}
-
-		// UITableView aktualisieren
 		self.tableView.reloadData()
 	}
 }

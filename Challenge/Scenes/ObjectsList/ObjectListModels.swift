@@ -12,6 +12,7 @@
 import UIKit
 // swiftlint:disable nesting identifier_name
 
+/// Models for listing objects.
 enum ListObjects {
 
 	struct DisplayedObject {
@@ -22,12 +23,14 @@ enum ListObjects {
 	}
 
 	enum FetchObjects {
-		struct Request { }
+		struct Request {
+			/// Id of object that should be excluded when showing search results.
+			var excludedId: String?
+		}
 		struct Response {
 			var objects: [Object]
 		}
 		struct ViewModel {
-
 			var displayedObjects: [DisplayedObject]
 			static let title = "Objects"
 		}

@@ -9,9 +9,12 @@ import UIKit
 import CoreData
 
 // swiftlint:disable identifier_name
+
+/// Handles CRUD operations on CoreData storage.
 class LocalStore: ObjectsStoreProtocol {
 
 	@MainActor
+	/// The context used for data manipulation as set in `AppDelegate`.
 	private var context: NSManagedObjectContext? {
 		let appDelegate = UIApplication.shared.delegate as? AppDelegate
 		return appDelegate?.persistentContainer.viewContext
