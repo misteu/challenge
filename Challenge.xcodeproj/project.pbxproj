@@ -18,6 +18,7 @@
 		CE082E60287E1497005B7238 /* TextFieldContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE082E5F287E1497005B7238 /* TextFieldContentConfiguration.swift */; };
 		CE082E77287E2C48005B7238 /* ManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE082E75287E2C48005B7238 /* ManagedObject+CoreDataClass.swift */; };
 		CE082E78287E2C48005B7238 /* ManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE082E76287E2C48005B7238 /* ManagedObject+CoreDataProperties.swift */; };
+		CE5D2C8D287F61CC0059ADC5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CE5D2C8C287F61CB0059ADC5 /* README.md */; };
 		CE62EAF0287DB4F400783F20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE62EAEF287DB4F400783F20 /* AppDelegate.swift */; };
 		CE62EAF2287DB4F400783F20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE62EAF1287DB4F400783F20 /* SceneDelegate.swift */; };
 		CE62EAFA287DB4F400783F20 /* Challenge.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE62EAF8287DB4F400783F20 /* Challenge.xcdatamodeld */; };
@@ -54,6 +55,7 @@
 		CE082E5F287E1497005B7238 /* TextFieldContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldContentConfiguration.swift; sourceTree = "<group>"; };
 		CE082E75287E2C48005B7238 /* ManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CE082E76287E2C48005B7238 /* ManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		CE5D2C8C287F61CB0059ADC5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		CE62EAEC287DB4F400783F20 /* Challenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Challenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE62EAEF287DB4F400783F20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE62EAF1287DB4F400783F20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 		CE62EAE3287DB4F400783F20 = {
 			isa = PBXGroup;
 			children = (
+				CE5D2C8C287F61CB0059ADC5 /* README.md */,
 				CE62EAEE287DB4F400783F20 /* Challenge */,
 				CE62EB08287DB4F700783F20 /* ChallengeTests */,
 				CE62EAED287DB4F400783F20 /* Products */,
@@ -275,6 +278,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE5D2C8D287F61CC0059ADC5 /* README.md in Resources */,
 				CE62EAFF287DB4F600783F20 /* LaunchScreen.storyboard in Resources */,
 				CE62EAFC287DB4F600783F20 /* Assets.xcassets in Resources */,
 			);
