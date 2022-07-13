@@ -50,12 +50,16 @@ class TextFieldContentView: UIView, UIContentView, UITextFieldDelegate {
 		addViews()
 		apply(configuration: configuration)
 
-		textFieldToken = NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main, using: { [weak self] notification in
-			guard let textField = notification.object as? UITextField else {
-				return
-			}
-			self?.appliedConfiguration.textChanged?(textField.text)
-		})
+		textFieldToken = NotificationCenter.default.addObserver(
+			forName: UITextField.textDidChangeNotification,
+			object: textField,
+			queue: .main,
+			using: { [weak self] notification in
+				guard let textField = notification.object as? UITextField else {
+					return
+				}
+				self?.appliedConfiguration.textChanged?(textField.text)
+			})
 	}
 
 	@available(*, unavailable)
@@ -71,7 +75,7 @@ class TextFieldContentView: UIView, UIContentView, UITextFieldDelegate {
 			textField.topAnchor.constraint(equalTo: guide.topAnchor),
 			textField.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
 			textField.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-			textField.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+			textField.trailingAnchor.constraint(equalTo: guide.trailingAnchor)
 		])
 	}
 

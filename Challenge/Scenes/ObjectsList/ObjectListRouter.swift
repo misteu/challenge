@@ -11,20 +11,16 @@
 
 import UIKit
 
+// swiftlint:disable identifier_name
 @objc protocol ObjectListRoutingLogic {
 	func routeToCreateObject() async
 	func routeToEditObject(id: String) async
 	func routeToAddRelationToObject(id: String, to objectId: String) async
 }
 
-protocol ObjectListDataPassing {
-	var dataStore: ObjectListDataStore? { get }
-}
-
-class ObjectListRouter: NSObject, ObjectListRoutingLogic, ObjectListDataPassing {
+class ObjectListRouter: NSObject, ObjectListRoutingLogic {
 
 	weak var viewController: ObjectListViewController?
-	var dataStore: ObjectListDataStore?
 
 	@MainActor
 	func routeToCreateObject() async {
@@ -42,12 +38,7 @@ class ObjectListRouter: NSObject, ObjectListRoutingLogic, ObjectListDataPassing 
 
 	@MainActor
 	func routeToAddRelationToObject(id: String, to objectId: String) async {
-		// TODO: refactor.
-		let editViewController = viewController?
-			.navigationController?
-			.viewControllers
-			.compactMap { $0 as? CreateAndEditObjectViewController }.first
-//		editViewController.interactor.
+		// TODO: Improve this. This might be error prone as it depends on the navigation stack.
 		viewController?.navigationController?.popViewController(animated: true)
 	}
 }

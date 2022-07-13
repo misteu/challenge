@@ -10,7 +10,7 @@
 //
 
 import UIKit
-// swiftlint:disable nesting
+// swiftlint:disable nesting identifier_name
 
 enum ListObjects {
 

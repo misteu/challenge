@@ -19,7 +19,8 @@ protocol ObjectListDisplayLogic: AnyObject {
 
 class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 	var interactor: ObjectListBusinessLogic?
-	var router: (NSObjectProtocol & ObjectListRoutingLogic & ObjectListDataPassing)?
+	var router: (NSObjectProtocol & ObjectListRoutingLogic)?
+	let searchController = UISearchController(searchResultsController: nil)
 
 	var cancelBag: Set<AnyCancellable> = []
 
@@ -45,10 +46,10 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 		interactor.presenter = presenter
 		presenter.viewController = viewController
 		router.viewController = viewController
-		router.dataStore = interactor
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ObjectCell")
 		setNavigationBar()
 		setSubscriptions()
+		setSearch()
 	}
 
 	private func setNavigationBar() {
@@ -57,6 +58,11 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 			self?.createObject()
 		}))
 		navigationItem.rightBarButtonItem = addButton
+	}
+
+	private func setSearch() {
+		self.navigationItem.searchController = searchController
+		searchController.searchResultsUpdater = self
 	}
 
 	private func setSubscriptions() {
@@ -78,13 +84,6 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 		}
 	}
 
-	// MARK: View lifecycle
-
-//	override func viewDidLoad() {
-//		super.viewDidLoad()
-//		fetchObjects()
-//	}
-
 	// MARK: Fetch objects
 
 	var displayedObjects: [ListObjects.DisplayedObject] = []
@@ -104,10 +103,10 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 
 	func displayObjectRelationSelector(viewModel: ListObjects.RelationSelector.ViewModel) {
 		displayedObjects = viewModel.displayedObjects
+		displayedObjects.removeAll(where: { $0.id == interactor?.selectedObjectId })
 		title = ListObjects.RelationSelector.ViewModel.title
 		tableView.reloadData()
 	}
-
 
 	// MARK: - TableView Data Source & Delegate
 
@@ -169,5 +168,24 @@ class ObjectListViewController: UITableViewController, ObjectListDisplayLogic {
 			}
 		}
 		return UISwipeActionsConfiguration(actions: [action])
+	}
+}
+
+extension ObjectListViewController: UISearchResultsUpdating {
+	func updateSearchResults(for searchController: UISearchController) {
+		if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+			displayedObjects = displayedObjects.filter { object in
+				object.name.localizedCaseInsensitiveContains(searchText) ||
+				object.type.localizedCaseInsensitiveContains(searchText) ||
+				object.description.localizedCaseInsensitiveContains(searchText)
+			}
+		} else {
+			Task {
+				await interactor?.listObjects(request: .init())
+			}
+		}
+
+		// UITableView aktualisieren
+		self.tableView.reloadData()
 	}
 }

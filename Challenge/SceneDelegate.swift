@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  challenge
 //
-//  Created by skrr on 12.07.22.
+//  Created by Michael Steudter on 12.07.22.
 //
 
 import UIKit
@@ -11,7 +11,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	var window: UIWindow?
 
-	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+	func scene(
+		_ scene: UIScene,
+		willConnectTo session: UISceneSession,
+		options connectionOptions: UIScene.ConnectionOptions
+	) {
 
 		// Load very first view controller without storyboards
 		guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -29,7 +33,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Called as the scene is being released by the system.
 		// This occurs shortly after the scene enters the background, or when its session is discarded.
 		// Release any resources associated with this scene that can be re-created the next time the scene connects.
-		// The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
+		// The scene may re-connect later, as its session was not necessarily discarded
+		// (see `application:didDiscardSceneSessions` instead).
 	}
 
 	func sceneDidBecomeActive(_ scene: UIScene) {
@@ -56,4 +61,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		(UIApplication.shared.delegate as? AppDelegate)?.saveContext()
 	}
 }
-

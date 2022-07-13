@@ -2,11 +2,12 @@
 //  ObjectStoreProtocol.swift
 //  Challenge
 //
-//  Created by skrr on 12.07.22.
+//  Created by Michael Steudter on 12.07.22.
 //
 
 import CoreData
 
+// swiftlint:disable identifier_name
 protocol ObjectsStoreProtocol {
 	func fetchObjects() async throws -> [Object]
 	func fetchObject(id: String) async -> Object?

@@ -2,13 +2,12 @@
 //  ManagedObject+CoreDataProperties.swift
 //  Challenge
 //
-//  Created by skrr on 13.07.22.
+//  Created by Michael Steudter on 13.07.22.
 //
 //
 
 import Foundation
 import CoreData
-
 
 extension ManagedObject {
 
@@ -40,6 +39,4 @@ extension ManagedObject {
 
 }
 
-extension ManagedObject : Identifiable {
-
-}
+extension ManagedObject: Identifiable { }

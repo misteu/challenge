@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 
+// swiftlint:disable identifier_name
 class LocalStore: ObjectsStoreProtocol {
 
 	@MainActor
@@ -17,18 +18,12 @@ class LocalStore: ObjectsStoreProtocol {
 	}
 
 	func fetchObjects() async throws -> [Object] {
-//		return (0...10).map { Object(name: "Name \($0)",
-//									 description: "Description \($0)",
-//									 type: "Type: \($0)") }
 		var retVal: [Object] = []
 		let objectFetchRequest: NSFetchRequest<ManagedObject> = ManagedObject.fetchRequest()
 
 		if let results = try await context?.fetch(objectFetchRequest) {
 			if results.count > 0 {
 				results.forEach {
-//					let relations: [String] = $0.objects?.compactMap { relation in
-//						(relation as? ManagedObject)?.objectID.uriRepresentation().absoluteString
-//					} ?? []
 
 					var relations: Set<String> = []
 					$0.objects?.forEach { relation in

@@ -2,11 +2,11 @@
 //  Object.swift
 //  Challenge
 //
-//  Created by skrr on 12.07.22.
+//  Created by Michael Steudter on 12.07.22.
 //
 
 import Foundation
-
+// swiftlint:disable identifier_name
 struct Object {
 	var name: String
 	var description: String
